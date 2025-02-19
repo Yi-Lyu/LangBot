@@ -106,7 +106,7 @@ class ResponseWrapper(stage.PipelineStage):
                         
                         function_names = [tc.function.name for tc in result.tool_calls]
 
-                        reply_text = f'调用函数 {".".join(function_names)}...'
+                        reply_text = f'正在{".".join(function_names)}...'
 
                         query.resp_message_chain.append(platform_message.MessageChain([platform_message.Plain(reply_text)]))
 
