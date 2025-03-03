@@ -233,6 +233,25 @@ class GeWeChatAdapter(adapter.MessagePlatformAdapter):
             elif 'TypeName' in data and data['TypeName'] == 'AddMsg':
                 try:
 
+                    # 获取当前时间戳
+                    current_timestamp = int(time.time())
+                    # 获取消息的时间戳
+                    message_timestamp = data['Data']['CreateTime']
+
+                    # 计算时间差（以秒为单位）
+                    time_diff = current_timestamp - message_timestamp
+
+                    # 如果消息时间超过1小时（3600秒），则忽略
+                    if time_diff > 3600:
+                        print(f"忽略过期消息，消息时间: {datetime.datetime.fromtimestamp(message_timestamp)}, "
+                              f"当前时间: {datetime.datetime.fromtimestamp(current_timestamp)}, "
+                              f"时间差: {time_diff}秒")
+                        return 'ok'
+                    else:
+                        print(f"处理消息，消息时间: {datetime.datetime.fromtimestamp(message_timestamp)}, "
+                              f"当前时间: {datetime.datetime.fromtimestamp(current_timestamp)}, "
+                              f"时间差: {time_diff}秒")
+
                     event = await self.event_converter.target2yiri(data.copy(), self.bot_account_id)
                 except Exception as e:
                     traceback.print_exc()
