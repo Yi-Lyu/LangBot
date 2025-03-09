@@ -227,6 +227,13 @@ class GeWeChatAdapter(adapter.MessagePlatformAdapter):
         async def gewechat_callback():
             data = await quart.request.json
             # print(json.dumps(data, indent=4, ensure_ascii=False))
+            
+            if 'data' in data:
+                data['Data'] = data['data']
+            if 'type_name' in data:
+                data['TypeName'] = data['type_name']
+            # print(json.dumps(data, indent=4, ensure_ascii=False))
+
 
             if 'testMsg' in data:
                 return 'ok'
@@ -267,7 +274,7 @@ class GeWeChatAdapter(adapter.MessagePlatformAdapter):
         target_id: str,
         message: platform_message.MessageChain
     ):
-        geweap_msg = await GewechatMessageConverter.yiri2target(message)
+        geweap_msg = await self.message_converter.yiri2target(message)
         # 此处加上群消息at处理
         # ats = [item["target"] for item in geweap_msg if item["type"] == "at"]
 
